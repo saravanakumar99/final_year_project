@@ -1,0 +1,85 @@
+/* Root container styles */
+.container-fluid {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  /* Row containing editor and sidebar */
+  .row {
+    flex-grow: 1;
+    display: flex;
+    overflow: hidden;
+  }
+  
+  /* Sidebar (Client panel) */
+  .col-md-2 {
+    display: flex;
+    flex-direction: column;
+    background-color: #1e1e2f;
+    color: white;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .col-md-2 .flex-grow-1 {
+    overflow-y: auto;
+  }
+  
+  .col-md-2 hr {
+    border-color: #444;
+  }
+  
+  .col-md-2 button {
+    margin-bottom: 10px;
+  }
+  
+  /* Main editor panel */
+  .col-md-10 {
+    display: flex;
+    flex-direction: column;
+    background-color: #282c34;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .bg-dark.p-2 {
+    display: flex;
+    justify-content: end;
+    padding: 10px;
+    background-color: #343a40;
+    border-bottom: 1px solid #444;
+    z-index: 10;
+  }
+  
+  /* Editor container */
+  .editor-container {
+    flex-grow: 1;
+    overflow: hidden;
+  }
+  
+  /* Compiler Section */
+  .bg-dark.p-3 {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30vh;
+    overflow-y: auto;
+    z-index: 1040;
+    transition: height 0.3s ease-in-out;
+  }
+  
+  .bg-dark.p-3.d-none {
+    height: 0;
+    overflow: hidden;
+  }
+  
+
+  
+  /* Floating buttons */
+  .btn.position-fixed {
+    z-index: 1050;
+  }
+  

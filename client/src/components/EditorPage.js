@@ -11,6 +11,8 @@ import {
 } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import ChatSection from "./ChatBotSection";
+import './EditorPage.css'
 
 // List of supported languages
 const LANGUAGES = [
@@ -38,7 +40,7 @@ function EditorPage() {
   const [isCompileWindowOpen, setIsCompileWindowOpen] = useState(false);
   const [isCompiling, setIsCompiling] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("python3");
-  const [isChatbotOpen, setIsChatbotOpen] = useState(false);  // New state for the chatbot
+  const [isChatOpen, setIsChatOpen] = useState(false); // Chat state
   const codeRef = useRef(null);
 
   const Location = useLocation();
@@ -133,8 +135,8 @@ function EditorPage() {
     setIsCompileWindowOpen(!isCompileWindowOpen);
   };
 
-  const toggleChatbotWindow = () => {  // Function to toggle chatbot window
-    setIsChatbotOpen(!isChatbotOpen);
+  const toggleChat = () => {
+    setIsChatOpen((prev) => !prev);
   };
 
   return (
@@ -244,46 +246,36 @@ function EditorPage() {
 
       {/* Chatbot toggle button */}
       <button
-  className="btn btn-info position-fixed"
-  onClick={toggleChatbotWindow}
-  style={{
-    top: "8px",
-    right: "120px",
-    marginRight: "20px",
-    zIndex: 1050,
-  }}
->
-  {isChatbotOpen ? "Close Chatbot" : "Open Chatbot"}
-</button>
-
-      {/* Chatbot section */}
-      <div
-        className={`bg-dark text-light p-3 ${
-          isChatbotOpen ? "d-block" : "d-none"
-        }`}
+        className="btn btn-info position-fixed"
+        onClick={toggleChat}
         style={{
-          position: "fixed",
-          bottom: "30vh",
-          top:50,
-          right: 0,
-          width:"25vw",
-          height: isChatbotOpen ? "50vh" : "0",
-          borderRadius:"20px",
-          transition: "height 0.3s ease-in-out",
-          overflowY: "auto",
-          zIndex: 1030,
+          top: "8px",
+          right: "120px",
+          marginRight: "20px",
+          zIndex: 1050,
         }}
       >
-        <h5>Chatbot</h5>
-        <div className="chat-container">
-          {/* Here, you can embed your chatbot interface */}
-          
-          <p>Chatbot interface goes here</p>
+        {isChatOpen ? "Close Chat" : "Open Chat"}
+      </button>
+
+      {/* Chatbot section */}
+      {isChatOpen && (
+        <div
+          className="chatbot-container bg-dark text-light p-3"
+          style={{
+            position: "fixed",
+            bottom: "0",
+            right:"0",
+            width: "100vw",
+            height: "61vh",
+            borderRadius: "20px",
+            overflowY: "auto",
+            zIndex: 2030,
+          }}
+        >
+          <ChatSection onClose={toggleChat} />
         </div>
-        <button className="btn btn-secondary mt-2" onClick={toggleChatbotWindow}>
-          Close Chatbot
-        </button>
-      </div>
+      )}
     </div>
   );
 }

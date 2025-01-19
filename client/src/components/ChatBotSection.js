@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import ChatHistory from './ChatHistory';
 import Loading from './Loading';
+import './ChatBotSection.css'
 
 const ChatSection = ({ onClose }) => {
   const [userInput, setUserInput] = useState('');
@@ -44,7 +45,7 @@ const ChatSection = ({ onClose }) => {
   return (
     <div className="floating-chat-window">
       <div className="chat-header">
-        <span>Chat Section</span>
+        <span>AI Assistant</span>
         <button onClick={onClose} className="close-button">
           ×
         </button>
