@@ -1,7 +1,9 @@
+import './Home.css';
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+
 
 function Home() {
   const [roomId, setRoomId] = useState("");
@@ -42,8 +44,8 @@ function Home() {
     <div className="container-fluid">
       <div className="row justify-content-center align-items-center min-vh-100">
         <div className="col-12 col-md-6">
-          <div className="card shadow-sm p-2 mb-5 bg-secondary rounded">
-            <div className="card-body text-center bg-dark">
+          <div className="card shadow-sm p-2 mb-5 bg-secondary rounded new_name1">
+            <div className="card-body text-center bg-dark new_name">
               <img
                 src="/images/codecast.png"
                 alt="Logo"
