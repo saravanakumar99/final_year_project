@@ -1,27 +1,32 @@
 import React from 'react';
+import './ChatHistory.css';
 import ReactMarkdown from 'react-markdown';
+import userIcon from '../img/user.png'; // Add the path to your user icon image
+import aiIcon from '../img/bot2.png';     // Add the path to your AI icon image
+
 const ChatHistory = ({ chatHistory }) => {
   return (
-    <>
+    <div className="chat-container">
       {chatHistory.map((message, index) => (
         <div
           key={index}
-          className={`flex items-start py-2 px-4 rounded-lg ${
-            message.type === 'user'
-              ? 'bg-gray-100 text-gray-800'
-              : 'bg-blue-100 text-blue-800'
+          className={`chat-message ${
+            message.type === 'user' ? 'chat-user' : 'chat-bot'
           }`}
         >
-          {message.type === 'user' && (
-            <span className="mr-2 font-bold text-gray-600">You:</span>
-          )}
-
-          <div>
+          <div className="icon-container">
+            <img
+              src={message.type === 'user' ? userIcon : aiIcon}
+              alt={message.type === 'user' ? 'User' : 'AI'}
+              className="chat-icon"
+            />
+          </div>
+          <div className="chat-content">
             <ReactMarkdown>{message.message}</ReactMarkdown>
           </div>
         </div>
       ))}
-    </>
+    </div>
   );
 };
 

@@ -1,0 +1,62 @@
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: hidden; /* Disable horizontal scrolling */
+    max-height: 400px;
+  }
+  
+  .chat-message {
+    display: flex;
+    align-items: flex-start; /* Align icons and content to the top */
+    gap: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    min-width: fit-content; /* Ensure container adapts to content size */
+    max-width: 50%; /* Limit the width to 50% */
+    word-wrap: break-word; /* Wrap long words to avoid overflow */
+  }
+  
+  .chat-user {
+    background-color: #f0f0f0;
+    color: #333;
+    margin-left: auto; /* Push user messages to the right */
+    flex-direction: row-reverse; /* Reverse layout for icon and text */
+  }
+  
+  .chat-bot {
+    background-color: #d0ebff;
+    color: #333;
+    margin-right: auto; /* Push bot messages to the left */
+  }
+  
+  .icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px; /* Container width for the image */
+    height: 50px; /* Container height for the image */
+  }
+  
+  .chat-icon {
+    width: 40px; /* Resize the image width */
+    height: 40px; /* Resize the image height */
+    border-radius: 50%; /* Makes the image circular */
+    object-fit: cover; /* Ensures the image scales properly within the container */
+  }
+  
+  .chat-content {
+    padding-top: 15px;
+    min-width: fit-content; /* Adapts to content size */
+    max-width: 100%; /* Prevents overflow within the parent */
+    word-wrap: break-word; /* Wraps long text */
+    line-height: 1.4; /* Improves readability */
+    overflow-wrap: break-word; /* Additional safety for long strings */
+  }
+  
+  .chat-bot .chat-content {
+    font-weight: bold; /* Optional: Different styling for bot responses */
+  }
+  
