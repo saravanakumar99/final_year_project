@@ -154,10 +154,14 @@ function EditorPage() {
 
           {/* Client list container */}
           <div className="d-flex flex-column flex-grow-1 overflow-auto">
-            <span className="mb-2">Members</span>
-            {clients.map((client) => (
-              <Client key={client.socketId} username={client.username} />
-            ))}
+          <span className="mb-2">Members</span>
+          {clients.map((client) => (
+            <Client
+              key={client.socketId}
+              username={client.username}
+              currentUser={Location.state.username} // Pass current user
+            />
+          ))}
           </div>
 
           <hr />
