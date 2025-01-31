@@ -9,101 +9,22 @@ const server = http.createServer(app);
 require("dotenv").config();
 
 const languageConfig = {
-  python3: { 
-    engine: "python", 
-    version: "3.10",
-    extension: "py",
-    template: code => code
-  },
-  java: { 
-    engine: "java", 
-    version: "15.0.2",  // Updated Java version
-    extension: "java",
-    template: code => `
-public class Main {
-    public static void main(String[] args) {
-        ${code}
-    }
-}`
-  },
-  cpp: { 
-    engine: "c++", // Changed from cpp to c++
-    version: "10.2.0",
-    extension: "cpp",
-    template: code => `
-#include <iostream>
-using namespace std;
-
-int main() {
-    ${code}
-    return 0;
-}`
-  },
-  nodejs: { 
-    engine: "node", // Changed from nodejs to node
-    version: "15.8.0",
-    extension: "js",
-    template: code => code
-  },
-  c: { 
-    engine: "c",
-    version: "10.2.0",
-    extension: "c",
-    template: code => `
-#include <stdio.h>
-
-int main() {
-    ${code}
-    return 0;
-}`
-  },
-  ruby: { 
-    engine: "ruby",
-    version: "3.0.0",
-    extension: "rb",
-    template: code => code
-  },
-  go: { 
-    engine: "go",
-    version: "1.16.2",
-    extension: "go",
-    template: code => `
-package main
-
-import "fmt"
-
-func main() {
-    ${code}
-}`
-  },
-  swift: { 
-    engine: "swift",
-    version: "5.3.3",
-    extension: "swift",
-    template: code => code
-  },
-  rust: { 
-    engine: "rust",
-    version: "1.50.0",
-    extension: "rs",
-    template: code => `
-fn main() {
-    ${code}
-}`
-  },
-  csharp: { 
-    engine: "c#", // Changed from csharp to c#
-    version: "5.0.201",
-    extension: "cs",
-    template: code => `
-using System;
-
-class Program {
-    static void Main() {
-        ${code}
-    }
-}`
-  }
+  python3: { engine: "python", version: "3" },
+  java: { engine: "java", version: "openjdk11" },
+  cpp: { engine: "cpp", version: "11" },
+  nodejs: { engine: "nodejs", version: "16" },
+  c: { engine: "c", version: "11" },
+  ruby: { engine: "ruby", version: "3" },
+  go: { engine: "go", version: "1.16" },
+  scala: { engine: "scala", version: "2.13" },
+  bash: { engine: "bash", version: "5" },
+  sql: { engine: "sql", version: "latest" },
+  pascal: { engine: "pascal", version: "3" },
+  csharp: { engine: "csharp", version: "5" },
+  php: { engine: "php", version: "7" },
+  swift: { engine: "swift", version: "5" },
+  rust: { engine: "rust", version: "1.50" },
+  r: { engine: "r", version: "4.0" },
 };
 
 // Enable CORS
@@ -120,7 +41,6 @@ const io = new Server(server, {
 });
 
 const userSocketMap = {};
-
 const getAllConnectedClients = (roomId) => {
   return Array.from(io.sockets.adapter.rooms.get(roomId) || []).map(
     (socketId) => {
@@ -162,16 +82,11 @@ io.on("connection", (socket) => {
         username: userSocketMap[socket.id],
       });
     });
+
     delete userSocketMap[socket.id];
     socket.leave();
   });
 });
-
-const preprocessCode = (code, language) => {
-  const config = languageConfig[language];
-  if (!config) return code;
-  return config.template(code);
-};
 
 app.post("/compile", async (req, res) => {
   const { code, language } = req.body;
@@ -181,53 +96,23 @@ app.post("/compile", async (req, res) => {
     return res.status(400).json({ error: "Unsupported language" });
   }
 
-  const processedCode = preprocessCode(code, language);
-  
   const payload = {
     language: pistonLangConfig.engine,
     version: pistonLangConfig.version,
     files: [
       {
-        name: `main.${pistonLangConfig.extension}`,
-        content: processedCode,
+        name: "code",
+        content: code,
       },
     ],
   };
 
   try {
-    console.log("Sending code to Piston:", payload);
     const response = await axios.post("https://emkc.org/api/v2/piston/execute", payload);
-    console.log("Piston response:", response.data);
-    
-    let output = '';
-    
-    // Combine stdout and stderr if both exist
-    if (response.data.run.stdout) {
-      output += response.data.run.stdout;
-    }
-    
-    if (response.data.run.stderr) {
-      output = output ? `${output}\nError:\n${response.data.run.stderr}` : response.data.run.stderr;
-    }
-    
-    // Remove any surrounding quotes if they exist
-    if (output.startsWith('"') && output.endsWith('"')) {
-      output = output.slice(1, -1);
-    }
-    
-    // Replace literal '\n' with actual newlines
-    output = output.replace(/\\n/g, '\n');
-    
-    // Trim any extra whitespace
-    output = output.trim();
-    
-    console.log("Processed output:", output);
-    res.json(output);
+    res.json(response.data.run.stdout.trim());
   } catch (error) {
-    console.error("Compilation error:", error.response?.data || error.message);
-    res.status(500).json({ 
-      error: error.response?.data?.message || "Failed to compile code"
-    });
+    console.error("Error compiling code:", error);
+    res.status(500).json({ error: "Failed to compile code" });
   }
 });
 
